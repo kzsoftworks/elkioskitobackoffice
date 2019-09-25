@@ -37,7 +37,7 @@ export const Payments = connect(
       { page: 1, perPage: 10000 },
       { field: "date", order: "DESC" },
       {
-        "date.>": moment("2011-04-15", "YYYY-MM-DD").toDate()
+        date: moment("2011-04-15", "YYYY-MM-DD").toDate()
       }
     );
   }, []);
