@@ -11,7 +11,7 @@ import {
 export const PurchaseEdit = props => (
   <Create {...props}>
     <SimpleForm>
-      <NumberInput source="price" step={1} />
+      <NumberInput source="cost" step={1} />
       <DateInput
         label="Purchase Date"
         source="date"
