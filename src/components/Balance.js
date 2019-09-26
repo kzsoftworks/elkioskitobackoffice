@@ -4,11 +4,8 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Moment from "moment";
-import ReactDataGrid from "react-data-grid";
 import { extendMoment } from "moment-range";
 import { getFirestore } from "../api/Firebase";
-
-console.log(ReactDataGrid);
 
 const moment = extendMoment(Moment);
 
@@ -56,23 +53,24 @@ export const Balance = () => {
       <Title title="Paymets" />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          Blanace for {previousMonth.format("MMMM")}
+          Balance for {previousMonth.format("MMMM")}
         </Typography>
-        <ReactDataGrid
-          columns={[
-            {
-              key: "name",
-              name: "User"
-            },
-            {
-              key: "balance",
-              name: "Balance"
-            }
-          ]}
-          rowGetter={i => balance[i]}
-          rowCount={balance.length}
-          minHeight={150}
-        />
+        <table className="tablita">
+          <thead>
+            <tr>
+              <th align="left">User</th>
+              <th align="right">Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {balance.map(row => (
+              <tr key={row.name}>
+                <td>{row.name}</td>
+                <td align="right">{row.balance}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </CardContent>
     </Card>
   );
