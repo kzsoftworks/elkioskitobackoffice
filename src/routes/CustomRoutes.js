@@ -1,8 +1,5 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
-import {Payments} from '../components/Payments';
+import React from "react";
+import { Route } from "react-router-dom";
+import { Balance } from "../components/Balance";
 
-export default  [
-    <Route exact path="/payments" component={Payments} />
-];
-
+export default [<Route exact path="/balance" component={Balance} />];

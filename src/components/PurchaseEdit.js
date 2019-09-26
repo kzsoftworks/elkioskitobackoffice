@@ -1,15 +1,15 @@
 import React from "react";
 import {
-  Create,
+  Edit,
   SimpleForm,
   NumberInput,
-  DateInput,
   ReferenceInput,
   SelectInput
 } from "react-admin";
+import { DateInput } from "react-admin-date-inputs";
 
 export const PurchaseEdit = props => (
-  <Create {...props}>
+  <Edit {...props}>
     <SimpleForm>
       <NumberInput source="cost" step={1} />
       <DateInput
@@ -20,6 +20,9 @@ export const PurchaseEdit = props => (
       <ReferenceInput label="Item" source="item_id" reference="items">
         <SelectInput optionText="name" />
       </ReferenceInput>
+      <ReferenceInput label="User" source="user_id" reference="users">
+        <SelectInput optionText="name" />
+      </ReferenceInput>
     </SimpleForm>
-  </Create>
+  </Edit>
 );

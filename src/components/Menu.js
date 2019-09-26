@@ -14,7 +14,7 @@ const Menu = ({ resources, onMenuClick, logout }) => (
         onClick={onMenuClick}
       />
     ))}
-    <MenuItemLink to="/payments" primaryText="Payments" onClick={onMenuClick} />
+    <MenuItemLink to="/balance" primaryText="Balance" onClick={onMenuClick} />
   </div>
 );
 
