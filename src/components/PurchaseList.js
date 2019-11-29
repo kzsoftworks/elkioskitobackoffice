@@ -11,9 +11,7 @@ export const PurchaseList = props => (
   <List {...props}>
     <Datagrid rowClick="edit">
       <DateField source="date" />
-      <ReferenceField source="item_id" reference="items">
-        <TextField source="name" />
-      </ReferenceField>
+      <TextField source="name" />
       <TextField source="cost" />
       <ReferenceField source="user_id" reference="users">
         <TextField source="name" />
