@@ -10,16 +10,17 @@ import { getFirestore } from "../api/Firebase";
 const moment = extendMoment(Moment);
 
 export const Balance = () => {
-  const previousMonth = moment().subtract("month", 1);
+//   const previousMonth = moment().subtract("month", 1);
   const [balance, setBalance] = useState([]);
 
   const setUpState = useCallback(async () => {
     const { purchases, users } = await fetchData();
     setBalance(
       users.map(user => ({
-        is: user.id,
+        id: user.id,
         name: user.name,
-        balance: getBalance(user.id, purchases)
+        previousBalance: getPreviousBalance(user.id, purchases),
+        currentBalance: getCurrentBalance(user.id, purchases),
       }))
     );
 
@@ -27,8 +28,8 @@ export const Balance = () => {
       const dbh = getFirestore();
       const purchasesQuerySnapshot = await dbh
         .collection("purchases")
-        .where("date", ">", previousMonth.startOf("month").toDate())
-        .where("date", "<", previousMonth.endOf("month").toDate())
+        // .where("date", ">", previousMonth.startOf("month").toDate())
+        // .where("date", "<", previousMonth.endOf("month").toDate())
         .get();
       const usersQuerySnapshot = await dbh.collection("users").get();
       return {
@@ -36,37 +37,59 @@ export const Balance = () => {
         users: usersQuerySnapshot.docs.map(normalizeFirebaseDoc)
       };
     }
-  }, [previousMonth]);
+  }, []);
 
   useEffect(() => {
     setUpState();
   }, [setUpState]);
 
-  function getBalance(userId, purchases) {
+  function getPreviousBalance(userId, purchases) {
+    const today = new Date();
+    const thisMonth = today.getUTCMonth();
+    const thisYear = today.getUTCFullYear();
+
     return purchases
-      .filter(purchase => purchase.user_id === userId)
-      .reduce((currentValue, purchase) => currentValue + purchase.cost, 0);
+        .filter(purchase => purchase.user_id === userId)
+        .filter(purchase =>
+            thisMonth === 0
+                ? purchase.date.toDate().getUTCMonth() === 11 && purchase.date.toDate().getUTCFullYear() === thisYear - 1
+                : purchase.date.toDate().getUTCFullYear() === thisYear && purchase.date.toDate().getUTCMonth() === thisMonth - 1
+        )
+        .reduce((currentValue, purchase) => currentValue + purchase.cost, 0);
+  }
+
+  function getCurrentBalance(userId, purchases) {
+    const today = new Date();
+    const thisMonth = today.getUTCMonth();
+    const thisYear = today.getUTCFullYear();
+
+    return purchases
+        .filter(purchase => console.log(purchase) || purchase.user_id === userId)
+        .filter(purchase => purchase.date.toDate().getUTCFullYear() === thisYear && purchase.date.toDate().getUTCMonth() === thisMonth)
+        .reduce((currentValue, purchase) => currentValue + purchase.cost, 0);
   }
 
   return (
     <Card>
-      <Title title="Paymets" />
+      <Title title="Payments" />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          Balance for {previousMonth.format("MMMM")}
+          Balances
         </Typography>
         <table className="tablita">
           <thead>
             <tr>
               <th align="left">User</th>
-              <th align="right">Balance</th>
+              <th align="right">Balance for last month</th>
+              <th align="right">Balance for this month</th>
             </tr>
           </thead>
           <tbody>
             {balance.map(row => (
               <tr key={row.name}>
                 <td>{row.name}</td>
-                <td align="right">{row.balance}</td>
+                <td align="right">{row.previousBalance}</td>
+                <td align="right">{row.currentBalance}</td>
               </tr>
             ))}
           </tbody>
