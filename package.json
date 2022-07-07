@@ -5,7 +5,7 @@
   "dependencies": {
     "date-fns": "^2.8.1",
     "material-ui-pickers": "^2.2.4",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "moment-range": "^4.0.2",
     "prop-types": "^15.7.2",
     "ra-data-json-server": "^2.9.9",
